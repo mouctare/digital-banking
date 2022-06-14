@@ -1,5 +1,6 @@
 package com.springsecurity.springservice;
 
+import com.springsecurity.springservice.dtos.CustomerDTO;
 import com.springsecurity.springservice.entity.*;
 import com.springsecurity.springservice.enums.AccountStatus;
 import com.springsecurity.springservice.enums.OperationType;
@@ -32,10 +33,10 @@ public class SpringserviceApplication {
 	CommandLineRunner commandLineRunner(BankAccountService bankAccountService) {
 		return args -> {
 			Stream.of("Hassan", "Yassine", "Aicha").forEach(name -> {
-				Customer customer = new Customer();
-				customer.setName(name);
-				customer.setEmail(name + "@gmail.com");
-				bankAccountService.saveCustomer(customer);
+				CustomerDTO customerDTO = new CustomerDTO();
+				customerDTO.setName(name);
+				customerDTO.setEmail(name + "@gmail.com");
+				bankAccountService.saveCustomer(customerDTO);
 			});
 			bankAccountService.listCustomer().forEach(cust -> {
 				try {

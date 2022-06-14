@@ -1,5 +1,9 @@
 package com.springsecurity.springservice.service;
 
+import com.springsecurity.springservice.dtos.BankAccountDTO;
+import com.springsecurity.springservice.dtos.CurrentBankAccountDTO;
+import com.springsecurity.springservice.dtos.CustomerDTO;
+import com.springsecurity.springservice.dtos.SavingBankAccountDTO;
 import com.springsecurity.springservice.entity.BankAccount;
 import com.springsecurity.springservice.entity.CurrentAccount;
 import com.springsecurity.springservice.entity.Customer;
@@ -11,7 +15,8 @@ import com.springsecurity.springservice.exceptions.CustomerNotFoundException;
 import java.util.List;
 
 public interface BankAccountService {
-     Customer saveCustomer(Customer customer);
+
+     CustomerDTO saveCustomer(CustomerDTO customerDTO);
 
      /**
       *
@@ -22,13 +27,20 @@ public interface BankAccountService {
       * @throws CustomerNotFoundException
       * exception surveillée
       */
-     CurrentAccount saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundException;
-     SavingAccount saveSavingBankAccount(double initialBalance, double interestRate, Long customerId) throws CustomerNotFoundException;
-     List<Customer> listCustomer();
-     BankAccount getBankAccount(String accountId) throws BankAccountNotFoundException;
+     CurrentBankAccountDTO saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundException;
+     SavingBankAccountDTO saveSavingBankAccount(double initialBalance, double interestRate, Long customerId) throws CustomerNotFoundException;
+     // List<Customer> listCustomer();
+     List<CustomerDTO> listCustomer();
+     BankAccountDTO getBankAccount(String accountId) throws BankAccountNotFoundException;
      void debit(String accountId, double amount, String description) throws BankAccountNotFoundException, BalanceNotSufficientException;
      void credit(String accountId, double amount, String description) throws BankAccountNotFoundException;
      void transfert(String accountIdSource, String accountIDestination, double amount) throws BankAccountNotFoundException, BalanceNotSufficientException;
 
      List<BankAccount> bankAccountList();
+
+     CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundException;
+
+     CustomerDTO updatedCustomer(CustomerDTO customerDTO);
+
+     void deleteCustomer(Long customerId);
 }
