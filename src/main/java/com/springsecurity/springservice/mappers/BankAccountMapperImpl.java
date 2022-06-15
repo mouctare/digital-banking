@@ -1,8 +1,10 @@
 package com.springsecurity.springservice.mappers;
 
+import com.springsecurity.springservice.dtos.AccountOperationDTO;
 import com.springsecurity.springservice.dtos.CurrentBankAccountDTO;
 import com.springsecurity.springservice.dtos.CustomerDTO;
 import com.springsecurity.springservice.dtos.SavingBankAccountDTO;
+import com.springsecurity.springservice.entity.AccountOperation;
 import com.springsecurity.springservice.entity.CurrentAccount;
 import com.springsecurity.springservice.entity.Customer;
 import com.springsecurity.springservice.entity.SavingAccount;
@@ -41,6 +43,7 @@ public class BankAccountMapperImpl {
         SavingAccount savingAccount = new SavingAccount();
         BeanUtils.copyProperties(savingBankAccountDTO, savingAccount);
         savingAccount.setCustomer(fromCustomerDTO(savingBankAccountDTO.getCustomerDTO()));
+        savingBankAccountDTO.setType(savingAccount.getClass().getSimpleName()); // Je récupère le nom de la classe de l'objet
         return savingAccount;
 
     }
@@ -50,6 +53,7 @@ public class BankAccountMapperImpl {
         CurrentBankAccountDTO currentBankAccountDTO = new CurrentBankAccountDTO();
         BeanUtils.copyProperties(currentAccount, currentBankAccountDTO);
         currentBankAccountDTO.setCustomerDTO(fromCustomer(currentAccount.getCustomer()));
+        currentBankAccountDTO.setType(currentAccount.getClass().getSimpleName());
         return currentBankAccountDTO;
 
 
@@ -62,4 +66,13 @@ public class BankAccountMapperImpl {
         currentAccount.setCustomer(fromCustomerDTO(currentBankAccountDTO.getCustomerDTO()));
         return currentAccount;
     }
+
+    public AccountOperationDTO fromAccountOperation(AccountOperation accountOperation){
+        AccountOperationDTO accountOperationDTO = new AccountOperationDTO();
+        BeanUtils.copyProperties(accountOperation, accountOperationDTO);
+        return accountOperationDTO;
+    }
+
+
+
 }

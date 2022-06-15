@@ -1,9 +1,6 @@
 package com.springsecurity.springservice.service;
 
-import com.springsecurity.springservice.dtos.BankAccountDTO;
-import com.springsecurity.springservice.dtos.CurrentBankAccountDTO;
-import com.springsecurity.springservice.dtos.CustomerDTO;
-import com.springsecurity.springservice.dtos.SavingBankAccountDTO;
+import com.springsecurity.springservice.dtos.*;
 import com.springsecurity.springservice.entity.*;
 import com.springsecurity.springservice.enums.OperationType;
 import com.springsecurity.springservice.exceptions.BalanceNotSufficientException;
@@ -162,9 +159,21 @@ public class BankAccountServiceImpl implements BankAccountService {
     }
 
     @Override
-    public List<BankAccount> bankAccountList(){
-        return bankAccountRepository.findAll();
-    }
+    public List<BankAccountDTO> bankAccountList(){
+        List<BankAccount> bankAccounts = bankAccountRepository.findAll();
+        List<BankAccountDTO>bankAccountDTOS = bankAccounts.stream().map(bankAccount-> {
+            if(bankAccount instanceof SavingAccount){
+                SavingAccount savingAccount = (SavingAccount) bankAccount;
+                return dtoMapper.fromSavingBankAccount(savingAccount);
+            }else {
+                CurrentAccount currentAccount = (CurrentAccount) bankAccount;
+                return dtoMapper.fromCurrentBankAccount(currentAccount);
+            }
+            }).collect(Collectors.toList());
+           return bankAccountDTOS;
+        }
+
+
 
     @Override
     public CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundException {
@@ -185,4 +194,9 @@ public class BankAccountServiceImpl implements BankAccountService {
         customerRepository.deleteById(customerId);
     }
 
+    @Override
+    public List<AccountOperationDTO> accountHistory(String accountId){
+      List<AccountOperation> accountOperations =  accountOperationRepository.findByBankAccountId(accountId);
+     return accountOperations.stream().map(operation -> dtoMapper.fromAccountOperation(operation)).collect(Collectors.toList());
+    }
 }

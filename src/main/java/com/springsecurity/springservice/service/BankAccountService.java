@@ -1,9 +1,6 @@
 package com.springsecurity.springservice.service;
 
-import com.springsecurity.springservice.dtos.BankAccountDTO;
-import com.springsecurity.springservice.dtos.CurrentBankAccountDTO;
-import com.springsecurity.springservice.dtos.CustomerDTO;
-import com.springsecurity.springservice.dtos.SavingBankAccountDTO;
+import com.springsecurity.springservice.dtos.*;
 import com.springsecurity.springservice.entity.BankAccount;
 import com.springsecurity.springservice.entity.CurrentAccount;
 import com.springsecurity.springservice.entity.Customer;
@@ -36,11 +33,13 @@ public interface BankAccountService {
      void credit(String accountId, double amount, String description) throws BankAccountNotFoundException;
      void transfert(String accountIdSource, String accountIDestination, double amount) throws BankAccountNotFoundException, BalanceNotSufficientException;
 
-     List<BankAccount> bankAccountList();
+     List<BankAccountDTO> bankAccountList();
 
      CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundException;
 
      CustomerDTO updatedCustomer(CustomerDTO customerDTO);
 
      void deleteCustomer(Long customerId);
+
+     List<AccountOperationDTO> accountHistory(String accountId);
 }
